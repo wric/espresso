@@ -1,7 +1,7 @@
 const apps = [
   {
     name: 'marax',
-    script: './backend/src/marax.js',
+    script: './backend/marax.js',
     env: {
       DEBUG: true,
       PORT: 8086,
@@ -17,7 +17,7 @@ const apps = [
   },
   {
     name: 'wilfa',
-    script: './backend/src/wilfa.js',
+    script: './backend/wilfa.js',
     env: {
       DEBUG: true,
       PORT: 8085

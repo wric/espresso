@@ -5,8 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "marax": "node src/marax.js",
-    "wilfa": "node src/wilfa.js"
+    "marax": "node marax.js",
+    "wilfa": "node wilfa.js"
   },
   "keywords": [],
   "author": "github.com/wric",
