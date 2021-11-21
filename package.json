@@ -1,0 +1,20 @@
+{
+  "name": "espresso",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "marax": "node src/marax.js",
+    "wilfa": "node src/wilfa.js"
+  },
+  "keywords": [],
+  "author": "github.com/wric",
+  "license": "mit",
+  "dependencies": {
+    "onoff": "^6.0.3",
+    "serialport": "^9.2.7",
+    "ws": "^8.2.3",
+    "@abandonware/noble": "^1.9.2-15"
+  }
+}
