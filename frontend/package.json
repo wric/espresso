@@ -1,0 +1,28 @@
+{
+  "name": "marax-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "d3": "^7.1.1",
+    "lodash": "^4.17.21",
+    "next": "^11.1.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-feather": "^2.0.9",
+    "react-trend": "^1.2.5",
+    "react-use-measure": "^2.0.4",
+    "react-use-websocket": "^2.8.0",
+    "recharts": "^2.1.5",
+    "styled-components": "^5.3.1"
+  }
+}
