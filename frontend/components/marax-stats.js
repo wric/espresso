@@ -1,4 +1,4 @@
-export const MaraxStats = ({ icon, value }) => (
+const MaraxStats = ({ icon, value }) => (
   <>
     <div className='stat'>
       {icon}
@@ -21,3 +21,5 @@ export const MaraxStats = ({ icon, value }) => (
     `}</style>
   </>
 )
+
+export { MaraxStats }

@@ -1,4 +1,3 @@
-// components/Layout.js
 const Layout = props => <>
   <div className="page-layout">
     {props.children}

@@ -2,7 +2,7 @@ import useMeasure from 'react-use-measure'
 
 const minMax = (min, max) => value => Math.max(Math.min(value, min), max)
 
-export function MaraxTempGraph ({ points, maxAge, xLines = 12, yLines = 6 }) {
+const MaraxTempGraph = ({ points, maxAge, xLines = 12, yLines = 6 }) => {
   const [ref, { width }] = useMeasure()
 
   const maxTemp = 130
@@ -155,3 +155,5 @@ export function MaraxTempGraph ({ points, maxAge, xLines = 12, yLines = 6 }) {
     </>
   )
 }
+
+export { MaraxTempGraph }

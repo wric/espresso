@@ -2,7 +2,7 @@ import { Clock } from 'react-feather'
 import useTimer from '../lib/hooks/use-timer.js'
 import { MaraxStats } from './marax-stats.js'
 
-export const MaraxTimer = () => {
+const MaraxTimer = () => {
   const {
     timer,
     isActive,
@@ -49,3 +49,5 @@ export const MaraxTimer = () => {
     </>
   )
 }
+
+export { MaraxTimer }

@@ -1,9 +1,8 @@
-import { useCallback } from 'react'
 import { Download } from 'react-feather'
 import { useWilfa } from '../lib/hooks/use-wilfa.js'
 import { MaraxStats } from './marax-stats.js'
 
-export const WilfaScale = () => {
+const WilfaScale = () => {
   const { state, tare } = useWilfa()
   const weight = (state?.weight || 0) / 10
   const value = `${weight.toFixed(1)} g`
@@ -25,3 +24,5 @@ export const WilfaScale = () => {
     </>
   )
 }
+
+export { WilfaScale }
