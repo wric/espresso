@@ -47,7 +47,6 @@ const useWilfa = () => {
   }, [lastMessage])
 
   const tare = useCallback(() => {
-    console.log('qwe')
     sendMessage('tare')
   }, [])
 
