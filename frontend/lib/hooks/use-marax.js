@@ -14,12 +14,12 @@ const initialState = {
 
 const websocketFilter = message => message?.data !== undefined
 
-const maraxReducer = (maxAge, wsMessage, state) => {
-  if (!wsMessage?.data) {
+const maraxReducer = (maxAge, message, state) => {
+  if (!message?.data) {
     return state
   }
 
-  const { event, value: data, timestamp } = JSON.parse(wsMessage.data)
+  const { event, value: data, timestamp } = JSON.parse(message.data)
   if (event === 'pump') {
     return { ...state, pump: data }
   }

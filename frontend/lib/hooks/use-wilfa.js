@@ -12,12 +12,12 @@ const initialState = {
 
 const websocketFilter = message => message?.data !== undefined
 
-const wilfaReducer = (wsMessage, state) => {
-  if (!wsMessage?.data) {
+const wilfaReducer = (message, state) => {
+  if (!message?.data) {
     return state
   }
 
-  const { event, value, timestamp } = JSON.parse(wsMessage.data)
+  const { event, value, timestamp } = JSON.parse(message.data)
 
   if (event === 'weight') {
     return { ...state, timestamp, weight: value }
