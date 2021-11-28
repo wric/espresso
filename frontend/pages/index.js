@@ -7,12 +7,14 @@ const Index = () => {
   return (
     <>
       <div className='index'>
-        <div className='info'>
-          <WilfaScale />
-          <MaraxTimer />
-          <MaraxPanel />
+        <div className='page'>
+          <div className='info'>
+            <WilfaScale />
+            <MaraxTimer />
+            <MaraxPanel />
+          </div>
+          <MaraxGraph />
         </div>
-        <MaraxGraph />
       </div>
 
       <style jsx>{`
@@ -23,9 +25,12 @@ const Index = () => {
           padding: 2rem 4rem;
         }
 
-        .info {
+        .page {
           width: 100%;
           max-width: 60rem;
+        }
+
+        .info {
           display: flex;
           justify-content: space-between;
           align-items: center;
