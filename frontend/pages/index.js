@@ -1,40 +1,53 @@
-import { MaraxGraph } from '../components/marax-graph.js'
-import { MaraxPanel } from '../components/marax-panel.js'
+import { MaraxBoiler } from '../components/marax-boiler.js'
+import { MaraxConfiguration } from '../components/marax-configuration.js'
+import { MaraxTempGraph } from '../components/marax-graph.js'
+import { MaraxHeater } from '../components/marax-heater.js'
+import { MaraxSteamTarget } from '../components/marax-steam-target.js'
+import { MaraxSteam } from '../components/marax-steam.js'
 import { MaraxTimer } from '../components/marax-timer.js'
+import { TopPanel } from '../components/top-panel.js'
 import { WilfaScale } from '../components/wilfa-scale.js'
+import { useMarax } from '../lib/hooks/use-marax.js'
+import { useWilfa } from '../lib/hooks/use-wilfa.js'
+
+const TIMESERIE_AGE = 120
 
 const Index = () => {
+  const marax = useMarax(TIMESERIE_AGE)
+  const { state: wilfa, tare } = useWilfa()
+
   return (
     <>
-      <div className='index'>
-        <div className='page'>
-          <div className='info'>
-            <WilfaScale />
-            <MaraxTimer />
-            <MaraxPanel />
-          </div>
-          <MaraxGraph />
+      <TopPanel>
+        <div className='left'>
+          <WilfaScale
+            weight={wilfa.weight}
+            isConnected={wilfa.status !== 'disconnected'}
+            onClick={tare}
+          />
+          <MaraxTimer />
         </div>
-      </div>
+
+        <div className='right'>
+          <MaraxBoiler boiler={marax.boiler} />
+          <MaraxSteam steam={marax.steam} />
+          <MaraxSteamTarget steamTarget={marax.steamTarget} />
+          <MaraxHeater boost={marax.boost} isOn={marax.heatOn} />
+          <MaraxConfiguration mode={marax.mode} version={marax.version} />
+        </div>
+      </TopPanel>
+
+      <MaraxTempGraph points={marax.timeserie} maxAge={TIMESERIE_AGE} />
 
       <style jsx>{`
-        .index {
+        .left {
           display: flex;
-          align-items: center;
-          flex-direction: column;
-          padding: 2rem 4rem;
+          gap: 1rem;
         }
 
-        .page {
-          width: 100%;
-          max-width: 60rem;
-        }
-
-        .info {
+        .right {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 2rem;
+          gap: 2rem;
         }
       `}</style>
     </>

@@ -1,28 +1,15 @@
 import { Download } from 'react-feather'
-import { useWilfa } from '../lib/hooks/use-wilfa.js'
-import { MaraxStats } from './marax-stats.js'
+import { TopPanelItemClickable } from './top-panel-item-clickable.js'
 
-const WilfaScale = () => {
-  const { state, tare } = useWilfa()
-  const weight = (state?.weight || 0) / 10
-  const value = `${weight.toFixed(1)} g`
+const WilfaScale = ({ weight, onClick, isConnected }) => (
+  <TopPanelItemClickable
+    icon={<Download size='18' />}
+    value={`${formatWeight(weight)} g`}
+    disabled={!isConnected}
+    onClick={onClick}
+  />
+)
 
-  if (state.status === 'disconnected') {
-    return <MaraxStats icon={<Download size='18' />} value={'off'} />
-  }
-
-  return (
-    <>
-      <div className='timer' onClick={tare}>
-        <MaraxStats icon={<Download size='18' />} value={value} />
-      </div>
-      <style jsx>{`
-        .timer {
-          cursor: pointer;
-        }
-      `}</style>
-    </>
-  )
-}
+const formatWeight = weight => ((weight || 0) / 10).toFixed(1)
 
 export { WilfaScale }

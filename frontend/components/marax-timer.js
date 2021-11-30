@@ -1,6 +1,6 @@
 import { Clock } from 'react-feather'
 import useTimer from '../lib/hooks/use-timer.js'
-import { MaraxStats } from './marax-stats.js'
+import { TopPanelItemClickable } from './top-panel-item-clickable.js'
 
 const MaraxTimer = () => {
   const {
@@ -34,19 +34,11 @@ const MaraxTimer = () => {
   }
 
   return (
-    <>
-      <div className='timer' onClick={handleClick}>
-        <MaraxStats
-          icon={<Clock size='18' />}
-          value={`${timer.toFixed(1)} s`}
-        />
-      </div>
-      <style jsx>{`
-        .timer {
-          cursor: pointer;
-        }
-      `}</style>
-    </>
+    <TopPanelItemClickable
+      icon={<Clock size='18' />}
+      value={`${timer.toFixed(1)} s`}
+      onClick={handleClick}
+    />
   )
 }
 

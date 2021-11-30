@@ -1,10 +1,10 @@
-import { Layout } from '../components/layout.js'
+import { WithLayout } from '../components/hoc/with-layout.js'
 
 const MyApp = ({ Component, pageProps }) => {
   return (
-    <Layout>
+    <WithLayout>
       <Component {...pageProps} />
-    </Layout>
+    </WithLayout>
   )
 }
 
