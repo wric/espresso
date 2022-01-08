@@ -7,7 +7,8 @@ const port = process.env.PORT
 const pin = process.env.PIN
 const serial = process.env.SERIAL
 
-let pump = null
+let internalPumpState = { timestamp: 0, isOn: 0 }
+let externalPumpState = { timestamp: 0, isOn: 0 }
 const wss = new WebSocketServer({ port })
 
 const broadcast = (event, value) => {
@@ -22,18 +23,35 @@ const broadcast = (event, value) => {
   })
 }
 
-pump = new Gpio(pin, 'in', 'both')
+const pump = new Gpio(pin, 'in', 'both')
 pump.watch((error, value) => {
   if (error) {
     console.error(error)
   } else {
-    broadcast('pump', value)
+    internalPumpState = { timestamp: Date.now(), isOn: value }
   }
 })
 
+const pumpEval = () => {
+  if (internalPumpState.isOn === externalPumpState.isOn) {
+    // State not changed, hence nothing to broadcast.
+    return
+  }
+
+  if (internalPumpState.timestamp - externalPumpState.timestamp < 100) {
+    // The magnetic field that triggers the reed switch is not consistent,
+    // hence we add a short grace period before broadcasting.
+    return
+  }
+
+  broadcast('pump', internalPumpState.isOn)
+  externalPumpState = internalPumpState
+}
+
+const intervalId = setInterval(pumpEval, 20)
+
 const serialport = new SerialPort(serial, { baudRate: 9600 })
 const parser = serialport.pipe(new SerialPort.parsers.Readline())
-
 parser.on('data', data => {
   broadcast('metric', parseMetrics(data))
 })
