@@ -5,13 +5,13 @@ const apps = [
     env: {
       DEBUG: true,
       PORT: 8086,
-      PIN: 17,
+      PIN: 24,
       SERIAL: '/dev/serial0'
     },
     env_production: {
       DEBUG: false,
       PORT: 8086,
-      PIN: 17,
+      PIN: 24,
       SERIAL: '/dev/serial0'
     }
   },
