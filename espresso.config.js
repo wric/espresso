@@ -2,6 +2,7 @@ const apps = [
   {
     name: 'marax',
     script: './backend/marax.js',
+    node_args: '--no-expose-wasm',
     env: {
       DEBUG: true,
       PORT: 8086,
@@ -18,6 +19,7 @@ const apps = [
   {
     name: 'wilfa',
     script: './backend/wilfa.js',
+    node_args: '--no-expose-wasm',
     env: {
       DEBUG: true,
       PORT: 8085
