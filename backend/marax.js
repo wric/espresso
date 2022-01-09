@@ -1,4 +1,4 @@
-import { throttle } from 'lodash'
+import { throttle } from 'lodash-es'
 import { Gpio } from 'onoff'
 import SerialPort from 'serialport'
 import { WebSocketServer } from 'ws'
@@ -26,16 +26,20 @@ const broadcast = (event, value) => {
   })
 }
 
-const updatePump = () => {
-  const now = Date.now()
+const updatePump = throttle(
+  () => {
+    const now = Date.now()
 
-  pumpRun = {
-    started: now - pumpRun.updated > 1000 ? now : pumpRun.started,
-    updated: now
-  }
+    pumpRun = {
+      started: now - pumpRun.updated > 1000 ? now : pumpRun.started,
+      updated: now
+    }
 
-  broadcast('pump', pumpRun)
-}
+    broadcast('pump', pumpRun)
+  },
+  200,
+  { leading: true, trailing: true }
+)
 
 pump.watch((error, _) => {
   if (error) {
@@ -43,7 +47,7 @@ pump.watch((error, _) => {
     return
   }
 
-  throttle(updatePump, 200, { leading: true, trailing: true })
+  updatePump()
 })
 
 parser.on('data', data => {
