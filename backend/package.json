@@ -12,9 +12,10 @@
   "author": "github.com/wric",
   "license": "mit",
   "dependencies": {
+    "@abandonware/noble": "^1.9.2-15",
+    "lodash-es": "^4.17.21",
     "onoff": "^6.0.3",
     "serialport": "^9.2.7",
-    "ws": "^8.2.3",
-    "@abandonware/noble": "^1.9.2-15"
+    "ws": "^8.2.3"
   }
 }

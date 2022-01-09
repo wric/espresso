@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
 
-const host = 'ws://raspberrypi:8085'
+const host = 'ws://espresso:8085'
 
 const initialState = {
   timestamp: 0,

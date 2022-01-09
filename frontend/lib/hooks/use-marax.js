@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
 
-const host = 'ws://raspberrypi:8086'
+const host = 'ws://espresso:8086'
 
 const initialState = {
   timestamp: 0,
@@ -21,6 +21,7 @@ const maraxReducer = (maxAge, message, state) => {
 
   const { event, value: data, timestamp } = JSON.parse(message.data)
   if (event === 'pump') {
+    console.log({ timestamp, pump: data })
     return { ...state, pump: data }
   }
 
