@@ -1,3 +1,4 @@
+import { throttle } from 'lodash'
 import { Gpio } from 'onoff'
 import SerialPort from 'serialport'
 import { WebSocketServer } from 'ws'
@@ -7,9 +8,11 @@ const port = process.env.PORT
 const pin = process.env.PIN
 const serial = process.env.SERIAL
 
-let internalPumpState = { timestamp: 0, isOn: 0 }
-let externalPumpState = { timestamp: 0, isOn: 0 }
 const wss = new WebSocketServer({ port })
+const pump = new Gpio(pin, 'in', 'both')
+const serialport = new SerialPort(serial, { baudRate: 9600 })
+const parser = serialport.pipe(new SerialPort.parsers.Readline())
+let pumpRun = { started: 0, updated: 0 }
 
 const broadcast = (event, value) => {
   const data = { timestamp: Date.now(), event, value }
@@ -23,35 +26,26 @@ const broadcast = (event, value) => {
   })
 }
 
-const pump = new Gpio(pin, 'in', 'both')
-pump.watch((error, value) => {
-  if (error) {
-    console.error(error)
-  } else {
-    internalPumpState = { timestamp: Date.now(), isOn: value }
-  }
-})
+const updatePump = () => {
+  const now = Date.now()
 
-const pumpEval = () => {
-  if (internalPumpState.isOn === externalPumpState.isOn) {
-    // State not changed, hence nothing to broadcast.
-    return
+  pumpRun = {
+    started: now - pumpRun.updated > 1000 ? now : pumpRun.started,
+    updated: now
   }
 
-  if (internalPumpState.timestamp - externalPumpState.timestamp < 100) {
-    // The magnetic field that triggers the reed switch is not consistent,
-    // hence we add a short grace period before broadcasting.
-    return
-  }
-
-  broadcast('pump', internalPumpState.isOn)
-  externalPumpState = internalPumpState
+  broadcast('pump', pumpRun)
 }
 
-const intervalId = setInterval(pumpEval, 20)
+pump.watch((error, _) => {
+  if (error) {
+    console.error(error)
+    return
+  }
 
-const serialport = new SerialPort(serial, { baudRate: 9600 })
-const parser = serialport.pipe(new SerialPort.parsers.Readline())
+  throttle(updatePump, 200, { leading: true, trailing: true })
+})
+
 parser.on('data', data => {
   broadcast('metric', parseMetrics(data))
 })
