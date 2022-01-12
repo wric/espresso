@@ -1,7 +1,7 @@
 const apps = [
   {
     name: 'marax',
-    script: './backend/marax.js',
+    script: './backend/marax.mjs',
     node_args: '--no-expose-wasm',
     env: {
       DEBUG: true,
@@ -18,7 +18,7 @@ const apps = [
   },
   {
     name: 'wilfa',
-    script: './backend/wilfa.js',
+    script: './backend/wilfa.mjs',
     node_args: '--no-expose-wasm',
     env: {
       DEBUG: true,
