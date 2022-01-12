@@ -1,0 +1,30 @@
+{
+  "name": "marax-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "frontend:dev": "next dev",
+    "frontend:build": "next build",
+    "frontend:start": "next start",
+    "marax:start": "node backend/marax.mjs",
+    "wilfa:start": "node backend/wilfa.mjs"
+  },
+  "keywords": [],
+  "author": "github.com/wric",
+  "license": "mit",
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-15",
+    "lodash-es": "^4.17.21",
+    "next": "^12.0.8",
+    "onoff": "^6.0.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-feather": "^2.0.9",
+    "react-use-measure": "^2.0.4",
+    "react-use-websocket": "^2.8.0",
+    "serialport": "^9.2.7",
+    "styled-components": "^5.3.1",
+    "ws": "^8.4.0"
+  }
+}
