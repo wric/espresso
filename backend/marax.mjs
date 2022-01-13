@@ -1,4 +1,3 @@
-import { throttle } from 'lodash-es'
 import { Gpio } from 'onoff'
 import SerialPort from 'serialport'
 import { WebSocketServer } from 'ws'
@@ -12,7 +11,7 @@ const wss = new WebSocketServer({ port })
 const pump = new Gpio(pin, 'in', 'both')
 const serialport = new SerialPort(serial, { baudRate: 9600 })
 const parser = serialport.pipe(new SerialPort.parsers.Readline())
-let pumpRun = { started: 0, updated: 0 }
+let pumpRun = { started: 0, elapsed: 0, timestamp: 0 }
 
 const broadcast = (event, value) => {
   const data = { timestamp: Date.now(), event, value }
@@ -26,28 +25,23 @@ const broadcast = (event, value) => {
   })
 }
 
-const updatePump = throttle(
-  () => {
-    const now = Date.now()
-
-    pumpRun = {
-      started: now - pumpRun.updated > 1000 ? now : pumpRun.started,
-      updated: now
-    }
-
-    broadcast('pump', pumpRun)
-  },
-  200,
-  { leading: true, trailing: true }
-)
-
 pump.watch((error, _) => {
   if (error) {
     console.error(error)
     return
   }
 
-  updatePump()
+  const timestamp = Date.now()
+  const isNewRun = timestamp - pumpRun.timestamp > 1000
+  const started = isNewRun ? timestamp : pumpRun.started
+  const elapsed = Math.floor((timestamp - started) / 100) / 10
+  const shouldBroadcast = isNewRun || elapsed > pumpRun.elapsed
+
+  pumpRun = { started, elapsed, timestamp }
+
+  if (shouldBroadcast) {
+    broadcast('pump', pumpRun)
+  }
 })
 
 parser.on('data', data => {
