@@ -3,7 +3,6 @@ import SerialPort from 'serialport'
 import { WebSocketServer } from 'ws'
 import { logger } from './logger'
 
-const debug = process.env.DEBUG === 'true'
 const port = process.env.PORT
 const pin = process.env.PIN
 const serial = process.env.SERIAL
