@@ -1,5 +1,6 @@
 import noble from '@abandonware/noble'
 import { WebSocketServer } from 'ws'
+import { logger } from './logger'
 
 const debug = process.env.DEBUG === 'true'
 const port = process.env.PORT
@@ -20,7 +21,7 @@ wss.on('connection', ws => {
   ws.on('message', data => {
     const message = data.toString()
     const event = events.find(event => event.name === message)
-    log('Received message:', { message })
+    logger('Received message:', { message })
 
     if (event && writer) {
       writer.write(Buffer.from(event.write, 'hex'), false)
@@ -31,7 +32,7 @@ wss.on('connection', ws => {
 const broadcast = (event, value) => {
   const data = { timestamp: Date.now(), event, value }
   const message = JSON.stringify(data)
-  log(`Broadcasting to ${wss.clients.size} clients:`, data)
+  logger(`Broadcasting to ${wss.clients.size} clients:`, data)
 
   wss.clients.forEach(client => {
     if (client.readyState === client.OPEN) {
@@ -41,7 +42,7 @@ const broadcast = (event, value) => {
 }
 
 noble.on('stateChange', async state => {
-  log('State changed.', { state })
+  logger('State changed.', { state })
   if (state === 'poweredOn') {
     await noble.startScanningAsync(['fee7'], false)
   } else {
@@ -50,11 +51,11 @@ noble.on('stateChange', async state => {
 })
 
 noble.on('discover', async peripheral => {
-  log('Dicovered peripheral.')
+  logger('Dicovered peripheral.')
   await noble.stopScanningAsync()
 
   peripheral.once('disconnect', async error => {
-    log('Peripheral disconnected:', { error })
+    logger('Peripheral disconnected:', { error })
     writer = null
     weight = null
     broadcast('status', wilfaStatus())
@@ -62,16 +63,16 @@ noble.on('discover', async peripheral => {
   })
 
   await peripheral.connectAsync()
-  log('Peripheral connected.')
+  logger('Peripheral connected.')
 
   const [service] = await peripheral.discoverServicesAsync(['ffb0'])
-  log('Service found.')
+  logger('Service found.')
 
   const [eventChar, weightChar] = await service.discoverCharacteristicsAsync([
     'ffb1',
     'ffb2'
   ])
-  log('Characteristics found.')
+  logger('Characteristics found.')
 
   writer = eventChar
   broadcast('status', wilfaStatus())
@@ -82,7 +83,7 @@ noble.on('discover', async peripheral => {
       broadcast('event', event)
     }
   })
-  log('eventChar set up.')
+  logger('eventChar set up.')
 
   weightChar.on('data', buffer => {
     const newWeight = bufferToWeight(buffer)
@@ -91,8 +92,8 @@ noble.on('discover', async peripheral => {
       broadcast('weight', weight)
     }
   })
-  log('weightChar set up.')
-  log('Characteristic set up.')
+  logger('weightChar set up.')
+  logger('Characteristic set up.')
 })
 
 const toSigned2Complement = hex => {
@@ -108,12 +109,6 @@ const bufferToWeight = buffer => {
 const bufferToEvent = buffer => {
   const hex = buffer.toString('hex')
   return events.find(unit => unit.read === hex)?.name
-}
-
-const log = (message, data = null) => {
-  if (debug) {
-    console.log(new Date().toISOString(), message, data)
-  }
 }
 
 const statusMessage = () =>

@@ -1,6 +1,7 @@
 import { Gpio } from 'onoff'
 import SerialPort from 'serialport'
 import { WebSocketServer } from 'ws'
+import { logger } from './logger'
 
 const debug = process.env.DEBUG === 'true'
 const port = process.env.PORT
@@ -16,7 +17,7 @@ let pumpRun = { started: 0, elapsed: 0, timestamp: 0 }
 const broadcast = (event, value) => {
   const data = { timestamp: Date.now(), event, value }
   const message = JSON.stringify(data)
-  log(`Broadcasting to ${wss.clients.size} clients:`, data)
+  logger(`Broadcasting to ${wss.clients.size} clients:`, data)
 
   wss.clients.forEach(client => {
     if (client.readyState === client.OPEN) {
@@ -59,12 +60,6 @@ const parseMetrics = data => {
     boiler: Number(metrics[3]),
     boost: Number(metrics[4]),
     heatOn: Number(metrics[5][0])
-  }
-}
-
-const log = (message, data = null) => {
-  if (debug) {
-    console.log(new Date().toISOString(), message, data)
   }
 }
 
