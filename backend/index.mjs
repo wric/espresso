@@ -5,10 +5,10 @@ import { initPump } from './pump.mjs'
 import { initMarax } from './marax.mjs'
 import { NodeBleWrapper } from 'node-ble-wrapper'
 
-const scaleUuid = process.env.PORT || '08:56:87:15:27:0B'
-const port = process.env.PORT
-const pin = process.env.PIN
-const serial = process.env.SerialPort
+const scaleUuid = process.env.SCALE_UUID || '08:56:87:15:27:0B'
+const port = process.env.WS_PORT || 8086
+const pin = process.env.PIN || 24
+const serial = process.env.SERIAL || '/dev/serial0'
 
 async function initEsprexxo () {
   const wss = new WebSocketServer({ port })
