@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws'
 // import { logger } from './logger'
-import { read, write } from './wilfa.mjs'
+import { parse, write } from './wilfa.mjs'
 import { initPump } from './pump.mjs'
 import { initMarax } from './marax.mjs'
 import { NodeBleWrapper } from 'node-ble-wrapper'
