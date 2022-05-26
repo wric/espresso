@@ -7,8 +7,7 @@
     "frontend:dev": "next dev",
     "frontend:build": "next build",
     "frontend:start": "next start",
-    "marax:start": "node backend/marax.mjs",
-    "wilfa:start": "node backend/wilfa.mjs"
+    "backend:start": "node backend/index.mjs"
   },
   "keywords": [],
   "author": "github.com/wric",
@@ -17,6 +16,7 @@
     "@abandonware/noble": "^1.9.2-15",
     "lodash-es": "^4.17.21",
     "next": "^12.0.8",
+    "node-ble-wrapper": "github:wric/node-ble-wrapper",
     "onoff": "^6.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
