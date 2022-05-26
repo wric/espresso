@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws'
-import { logger } from './logger'
+// import { logger } from './logger'
 import { read, write } from './wilfa.mjs'
 import { initPump } from './pump.mjs'
 import { initMarax } from './marax.mjs'
