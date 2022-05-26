@@ -7,7 +7,7 @@
     "frontend:dev": "next dev",
     "frontend:build": "next build",
     "frontend:start": "next start",
-    "backend:start": "node backend/index.mjs"
+    "backend:start": "node --no-expose-wasm backend/index.mjs"
   },
   "keywords": [],
   "author": "github.com/wric",
