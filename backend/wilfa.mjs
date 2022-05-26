@@ -7,7 +7,8 @@ const events = [
   { name: 'g', write: 'f51100', read: 'fa0400' },
   { name: 'oz', write: 'f51101', read: 'fa0401' },
   { name: 'lb', write: 'f51102', read: 'fa0402' },
-  { name: 'tare', write: 'f510', read: '' }
+  { name: 'tare', write: 'f510', read: '' },
+  { name: 'disconnect', write: '', read: 'fa03' }
 ]
 
 async function write (characteristics, message) {
@@ -22,7 +23,7 @@ async function write (characteristics, message) {
   }
 }
 
-async function parse ({ timestamp, source, value }) {
+function parse ({ timestamp, source, value }) {
   const parsed =
     source === weightObject ? bufferToWeight(value) : bufferToEvent(value)
 
