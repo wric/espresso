@@ -21,7 +21,7 @@ function initPump (pin, onNotify) {
     pumpRun = { started, elapsed, timestamp }
 
     if (shouldBroadcast) {
-      onNotify({ source: 'pump', pumpRun })
+      onNotify(pumpRun)
     }
   })
 

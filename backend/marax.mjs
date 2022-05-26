@@ -5,7 +5,7 @@ function initMarax (serial, onNotify, baudRate = 9600) {
   const marax = serialport.pipe(new SerialPort.parsers.Readline())
 
   marax.on('data', data => {
-    onNotify({ source: 'metric', metric: parseMetrics(data) })
+    onNotify(parseMetrics(data))
   })
 
   return { marax }
