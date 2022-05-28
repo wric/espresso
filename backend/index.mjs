@@ -1,9 +1,10 @@
+import { NodeBleWrapper } from 'node-ble-wrapper'
 import { WebSocketServer } from 'ws'
+import { initMarax } from './marax.mjs'
+import { initPump } from './pump.mjs'
+import { writeMessage } from './store.mjs'
 // import { logger } from './logger'
 import { parse, write } from './wilfa.mjs'
-import { initPump } from './pump.mjs'
-import { initMarax } from './marax.mjs'
-import { NodeBleWrapper } from 'node-ble-wrapper'
 
 const scaleUuid = process.env.SCALE_UUID || '08:56:87:15:27:0B'
 const port = process.env.WS_PORT || 8086
@@ -14,13 +15,13 @@ async function initEsprexxo () {
   const wss = new WebSocketServer({ port })
   wss.on('connection', wssHandleConnection)
 
-  const broadcast = source => value => {
-    const data = { timestamp: Date.now(), source, value }
-    const message = JSON.stringify(data)
+  const onEvent = source => data => {
+    const message = { timestamp: Date.now(), source, data }
+    writeMessage(message)
 
     wss.clients.forEach(client => {
       if (client.readyState === client.OPEN) {
-        client.send(message)
+        client.send(JSON.stringify(message))
       }
     })
   }
@@ -37,11 +38,11 @@ async function initEsprexxo () {
     }
   }
 
-  const { pump } = initPump(pin, broadcast('pump'))
-  const { marax } = initMarax(serial, broadcast('marax'))
+  const { pump } = initPump(pin, onEvent('pump'))
+  const { marax } = initMarax(serial, onEvent('marax'))
   const { getCharacteristics, shutdown } = await NodeBleWrapper(
     scaleUuid,
-    event => broadcast('scale')(parse(event))
+    event => onEvent('scale')(parse(event))
   )
 
   process.on('SIGINT', () => {
